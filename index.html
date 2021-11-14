@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherIt</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            font-family:monospace;
+            background-image: url('photo.jpg');
+            background-size: cover;
+            background-position: top center;
+        }
+        .app-wrap{
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-image: linear-gradient(to bottom, rgba(0,0,0,0.3)
+            rgba(0,0,0,0.6));
+        }
+        header{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 15px 15px;
+        }
+        header input{
+            width: 100%;
+            max-width: 280px;
+            padding: 10px 15px;
+            border:  none;
+            outline: none;
+            background-color: rgba(255,255, 255, 0.3);
+            border-radius: 20px px 20px 0px;
+            color: #313131;
+        }
+        header input:focus{
+            background-color: azure;
+        }
+        main{
+            flex: 1 1 100%;
+            padding: 25px 25px 50px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            flex-direction: column;
+            font-size:x-large;
+        }
+        .location .city{
+            color: aliceblue;
+            font-size: 50px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        .location .date{
+            color: aliceblue;
+            font-size: 20px;
+            font-weight: 300;
+            margin-bottom: 5px;
+        }
+        .current .temp{
+            color: aliceblue;
+            font-size: 120px;
+        }
+        .current .temp span{
+            font-weight: 500;
+        }
+        .current .weather{
+            color: aliceblue;
+            font-size: 30px;
+            
+        }
+        .current .hi-low{
+            color: aliceblue;
+            font-size: 30px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-wrap">
+        <header>
+        <input type="text" autocomplete="off" placeholder="Search for a city..." class="search-box">
+        </header>
+        <main>
+        <section class="location">
+            <div class="city">Kolkata</div>
+            <div class="date">Saturday</div>
+        </section>
+        <div class="current">
+            <div class="temp"><span>20</span><span>°c</span></div>
+            <div class="hi-low">15°c/30°c</div>
+        </div>
+    </main>
+    </div>
+    <script>
+        const api ={
+            key:"64e28985e8cb499cd16c16abd40d558a",
+            baseurl: "https://api.openweathermap.org/data/2.5/"
+
+        }
+        const searchbox=document.querySelector(".search-box");
+        searchbox.addEventListener("keypress",onKeyPress);
+
+        function onKeyPress(evt){
+            if(evt.keyCode==13){
+                getResults(searchbox.value);
+                
+            }
+        }
+        function getResults(query){
+           fetch(`${api.baseurl}weather?q=${query}&units=metric&APPID=${api.key}`)
+             .then(r =>r.json())
+             .then((res)=>{
+                 console.log(res);
+                 document.querySelector(".temp span").innerText=res.main.temp;
+                 document.querySelector(".city").innerText=res.name;
+                 document.querySelector(".hi-low").innerText= `${res.main.temp_min}°c/${res.main.temp_max}°c`;
+
+
+             })
+        }
+        function days(){
+            let dates=document.querySelector(".location .date");
+            let weekdays=["sunday","monday","tuesday","wednesday","thursday","friday","saturday"];
+
+            let today=weekdays[new Date().getDay()];
+            dates.innerText=today;
+        }
+
+        days()
+
+        
+
+
+    </script>
+</body>
+</html>
